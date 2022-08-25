@@ -8,7 +8,7 @@ import define6 from "./c6c7a741ac87d656@52.js";
 import define7 from "./c2b912d136a0857d@2096.js";
 
 function _title(md){return(
-md`# Polytron Warehouse Visualization`
+md`# 3D Visualization`
 )}
 
 function* _renderedScene(warehouseDataVisual,THREE,boundingBox,camera,width,height,invalidation)
@@ -200,6 +200,15 @@ async function _layoutData(d3,FileAttachment){return(
 d3.csvParse(await FileAttachment("Small Warehouse - Layout.csv").text(), d3.autoType)
 )}
 
+function _testing(d3, FileAttachment) {
+  // return d3;
+  return d3.csvParse(FileAttachment("Small Warehouse - Layout.csv").text(), d3.autoType)
+}
+
+
+
+
+
 async function _inventoryData(d3,FileAttachment)
 { 
   
@@ -243,7 +252,7 @@ function _warehouseVisual(THREE,layoutData)
 		// console.log(warehouse);											
     // https://www.cloudhadoop.com/2018/08/es6-map-class-tutorials-with-javascript.html
 		const geometriesMap = new Map();
-		const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.5}); 			
+		const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4}); 			
 	  // console.log(geometriesMap);
 	  // console.log(edgeMaterial);
     for (let i = 0; i < layoutData.length; i++) {
@@ -280,14 +289,12 @@ function _warehouseVisual(THREE,layoutData)
               slot.position.x = parseFloat(X) + (parseFloat(HEIGHT) / 2); 
               slot.position.y = parseFloat(Z) + (parseFloat(DEPTH)  / 2); 							
               slot.position.z = parseFloat(Y) + (parseFloat(HEIGHT) / 2);  
-      
-              console.log(slot);
+              // console.log(slot);
 				warehouse.add(slot);			
 		} // for
     
     const scene = new THREE.Scene()
     scene.add(warehouse);
-    
     return {scene: scene};
 				
 	}
@@ -461,7 +468,7 @@ function _selColumn(warehouseDataVisual,select)
                                    typeof warehouseDataVisual.data[0][c] != "string" );
   
   const selColumn = select({
-    title: "Select Data Column",
+    title: "Pallet Classification",
     description: "",
     options: dataColumns.map(c => ({value: c, label: c.replace("_", " ")}) ),
     multiple: false,
@@ -581,6 +588,7 @@ export default function define(runtime, observer) {
     ["Small Warehouse - Inventory.csv", {url: new URL("./files/INVENTORY.csv", import.meta.url), mimeType: "text/csv", toString}],
     // ["mouse.png", {url: new URL("./files/19ecf0da78a8e72518454d618d989e166135422105ee22bdc6aceb1193b85b2806de2c2a7d059ce2de3dddf927e2b1753e801cd3c86fac01b8857d7e0f53a6a0.png", import.meta.url), mimeType: "image/png", toString}]
   ]);
+  
   main.builtin("FileAttachment", runtime.fileAttachments(name => fileAttachments.get(name)));
   main.variable(observer("title")).define("title", ["md"], _title);
   main.variable(observer("renderedScene")).define("renderedScene", ["warehouseDataVisual","THREE","boundingBox","camera","width","height","invalidation"], _renderedScene);
@@ -591,7 +599,10 @@ export default function define(runtime, observer) {
   // main.variable(observer()).define(["md"], _7);
   // main.variable(observer()).define(["md","FileAttachment"], _8);
   // main.variable(observer()).define(["md"], _9);
+  main.variable(observer("viewof selColumn")).define("viewof selColumn", ["warehouseDataVisual","select"], _selColumn);
+  main.variable(observer("viewof scaleType")).define("viewof scaleType", ["select"], _scaleType);
   main.variable(observer("layoutData")).define("layoutData", ["d3","FileAttachment"], _layoutData);
+  
   main.variable(observer("inventoryData")).define("inventoryData", ["d3","FileAttachment"], _inventoryData);
   // main.variable(observer()).define(["md"], _12);
   // main.variable(observer()).define(["md"], _13);
@@ -606,10 +617,12 @@ export default function define(runtime, observer) {
   main.variable(observer("boundingBox")).define("boundingBox", ["THREE","warehouseDataVisual"], _boundingBox);
   main.variable(observer("visualObjWithHeaviestItem")).define("visualObjWithHeaviestItem", ["warehouseDataVisual","d3"], _visualObjWithHeaviestItem);
   // main.variable(observer()).define(["md"], _23);
-  main.variable(observer("viewof scaleType")).define("viewof scaleType", ["select"], _scaleType);
+
+  // main.variable(observer("viewof scaleType")).define("viewof scaleType", ["select"], _scaleType);
+
   main.variable(observer("scaleType")).define("scaleType", ["Generators", "viewof scaleType"], (G, _) => G.input(_));
   // main.variable(observer()).define(["md"], _25);
-  main.variable(observer("viewof selColumn")).define("viewof selColumn", ["warehouseDataVisual","select"], _selColumn);
+  
   main.variable(observer("selColumn")).define("selColumn", ["Generators", "viewof selColumn"], (G, _) => G.input(_));
   // main.variable(observer()).define(["md"], _27);
   main.variable(observer("viewof colorScheme")).define("viewof colorScheme", ["d3","colorSchemes","colorInterpolatorPicker"], _colorScheme);
@@ -637,6 +650,18 @@ export default function define(runtime, observer) {
   // main.variable(observer()).define(["md"], _40);
   const child7 = runtime.module(define7);
   main.import("dataVisual", child7);
+  var functions = {
+    test: function(callback) {
+      
+      callback("Hello")
+    }
+  }
+  main.exports = functions;
+  // console.log(main.variable.d3);
+
+  // var attach = main.builtin("FileAttachment", runtime.fileAttachments(name => fileAttachments.get(name)));
+  // main.exports = _layoutData(d3test, attach);
+
   // main.variable(observer("license")).define("license", ["md"], _license);
   // main.variable(observer()).define(["md"], _43);
   // main.variable(observer()).define(["md"], _44);

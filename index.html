@@ -1,14 +1,273 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <title>HIT Warehouse Visualization</title>
-<link rel="stylesheet" type="text/css" href="./inspector.css">
-<body>
+<div class="card">
+    <link rel="stylesheet" type="text/css" href="./inspector.css">
+    <h1>Polytron Warehouse Visualization</h1>
+    <br>
+    <br>
+    <div class="card-header">
+        <div class="btn-group" role="group">
+            <div class="form-group">
+                <br>
+                <button title="show/hide table" type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#main-table" aria-expanded="false" aria-controls="main-table">Inventory Data</button>
+                <button title="show/hide inventory filter" type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#main-filter" aria-expanded="false" aria-controls="main-filter">Find Inventory</button>
+                <button title="show/hide edit inventory" type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#main-edit" aria-expanded="false" aria-controls="main-edit">Edit Location</button>
+                <!-- <button type="button" name="create_new" id="create_new" class="btn btn-secondary"><i class="fa fa-plus"></i>Filter Data</button> -->
+            </div>
+        </div>
+    </div>
+    <div class="collapse" id="main-table">
+        <div class="card card-body">
+            <div class="tab-content">
+                <h3>Inventory Data :</h3>
+                <div class="table-responsive-sm">
+                    <table class="table table-hover compact table-condensed table-striped" id="inventory-table" width="100%">
+                        <thead>
+                            <tr>
+                                <th>NO</th>
+                                <th>LOCATION</th>
+                                <th>ITEM NUMBER</th>
+                                <th>DESCRIPTION</th>
+                                <th>SIZE</th>
+                                <th>ITEM WEIGHT</th>
+                                <th>WEEKLY MOVEMENT</th>
+                                <th>QTY PER PALLET</th>
+                                <th>DAMAGED PROBABILITY</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="collapse" id="main-filter">
+        <div class="card card-body">
+            <div class="tab-content">
+                <h3>Find your pallet</h3>
+                <form method="POST" id="search-form" class="form" role="form">
+                    <!-- {{-- EXISTING PALLET --}} -->
+                    <div class="row mb-2">
+                        <div class="col col-md-1" style="max-width:150px; flex:0px"><label for="existing_pallet">Existing Pallet</label></div>
+                        <div class="col col-md-5">
+                            <div class='input-group'>
+                                <select id="existing_pallet" name="existing_pallet" class="form-control text-uppercase">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- {{-- SEARCH --}} -->
+                    <div class="row">
+                        <div class="col col-md-3"><button id="submit_find" type="button" class="btn btn-primary" title="search"><i class="fa fa-search"></i>SEARCH</button> </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="collapse" id="main-edit">
+        <div class="card card-body">
+            <div class="tab-content">
+                <h3>Edit Pallet Location</h3>
+                <form method="POST" id="edit-form" class="form" role="form">
+                    <!-- {{-- EXISTING PALLET --}} -->
+                    <div class="row mb-2">
+                        <div class="col col-md-1" style="max-width:150px; flex:0px"><label for="selected_pallet">Pallet</label></div>
+                        <div class="col col-md-5">
+                            <div class='input-group'>
+                                <select id="selected_pallet" name="selected_pallet" class="form-control text-uppercase">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- {{-- AVILABLE LOCATION --}} -->
+                    <div class="row mb-2">
+                        <div class="col col-md-1" style="max-width:150px; flex:0px"><label for="location_destination">Avilable Location</label></div>
+                        <div class="col col-md-5">
+                            <div class='input-group'>
+                                <select id="location_destination" name="location_destination" class="form-control text-uppercase">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+    
+                    
+                    <!-- {{-- SEARCH --}} -->
+                    <div class="row">
+                        <div class="col col-md-3"><button id="submit_move" type="button" class="btn btn-primary" title="edit"><i class="fa fa-search"></i>EDIT</button> </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    table, th, td { 
+        /* border: 1px solid black; */
+        white-space: nowrap;
+    }
+    .hidden>div {
+        display:none;
+    }
+    .visible>div {
+        display:block;
+    }
+</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+</script>
 <script type="module">
+
+// $(document).ready(function(){
+//     setTimeout(function(){
+
+//         $('#inventory-table').DataTable({
+//             data: datas,
+//             columns: [
+//                 { title: 'LOCATION' },
+//                 { title: 'ITEM_NO' },
+//                 { title: 'ITEM_DESCRIPTION' },
+//                 { title: 'SIZE.' },
+//                 { title: 'ITEM_WGT' },
+//                 { title: 'WEEKLY_MVMT' },
+//                 { title: 'QTY_PER_PALLET' },
+//                 { title: 'DAMAGED_PROBABILITY' },
+//             ],
+//         });
+
+//    },6000);
+// });
+
+$('#submit_find').click(function(event){
+    var existing_pallet_find = $('#existing_pallet').val();
+    $.ajax({
+        type: 'POST',
+        url: 'controller.php', 
+        data: {
+            'existing_pallet_find' : existing_pallet_find,
+            'datas' : datas,
+        },
+        success: function(data){
+            if(data)
+            { 
+                console.log('find in');
+                location.href = 'http://localhost/polytron-warehouse-visualization/find.html';
+            }
+        }
+    });
+});
+
+$('#submit_move').click(function(event){
+    var selected_pallet = $('#selected_pallet').val();
+    var location_destination = $('#location_destination').val();
+    console.log(selected_pallet);
+    $.ajax({
+        type: 'POST',
+        url: 'controller_edit.php', 
+        data: {
+            'selected_pallet' : selected_pallet,
+            'location_destination' : location_destination,
+            'datas' : datas,
+        },
+        success: function(data){
+            if(data)
+            { 
+                console.log('move in');
+                location.reload(true);
+            }
+        }
+    });
+});
 
 import define from "./index.js";
 import {Runtime, Library, Inspector} from "./runtime.js";
 
 const runtime = new Runtime();
 const main = runtime.module(define, Inspector.into(document.body));
-console.log(main.variable());
+var x = runtime._modules;
+var xy = main._scope;
+console.log(xy);
+
+var datas = [];
+var loc_exist = [];
+var loc_avail = [];
+var loc_layout = [];
+
+var n = 0;
+setTimeout(dataSU, 5000);
+var count = 0;
+function dataSU() {
+    xy.forEach(element => {
+        console.log(element);
+        if (element._name == 'inventoryData') {  
+            element._value.forEach(item => {
+                // console.log(item.LOCATION);
+                datas.push({
+                    'LOCATION' : item.LOCATION,
+                    'ITEM_NO' : item.ITEM_NO,
+                    'ITEM_DESCRIPTION' : item.ITEM_DESCRIPTION,
+                    'SIZE' : item.SIZE,
+                    'ITEM_WGT' : item.ITEM_WGT,
+                    'WEEKLY_MVMT' : item.WEEKLY_MVMT,
+                    'QTY_PER_PALLET' : item.QTY_PER_PALLET,
+                    'DAMAGED_PROBABILITY' : item.DAMAGED_PROBABILITY,
+                });
+
+                loc_exist.push({
+                    'LOCATION' : item.LOCATION
+                });
+                
+                count++;
+                $("#inventory-table").find("tBody").append($("<tr><td>" + count + "</td>" + 
+                                                        "<td>" + item.LOCATION + "</td>" + 
+                                                        "<td>" + item.ITEM_NO + "</td>" + 
+                                                        "<td>" + item.ITEM_DESCRIPTION + "</td>" + 
+                                                        "<td>" + item.SIZE + "</td>" + 
+                                                        "<td>" + item.ITEM_WGT + "</td>" + 
+                                                        "<td>" + item.WEEKLY_MVMT + "</td>" +
+                                                        "<td>" + item.QTY_PER_PALLET + "</td>" +
+                                                        "<td>" + item.DAMAGED_PROBABILITY + "</td> </tr>"));
+                // console.log(data_location);
+                var existing_pallet = document.getElementById("existing_pallet");
+                var option_existing = document.createElement("option");
+                option_existing.text = item.ITEM_NO+' - '+item.LOCATION;
+                existing_pallet.add(option_existing);
+
+                var selected_pallet = document.getElementById("selected_pallet");
+                var option_selected = document.createElement("option");
+                option_selected.text = item.ITEM_NO+' - '+item.LOCATION;
+                selected_pallet.add(option_selected);
+                
+            });
+        }
+
+        else if (element._name == 'warehouseDataVisual') {  
+            element._value.data.forEach(locs => {
+                if (typeof locs.ITEM_NO === 'undefined') {
+                    console.log(locs.LOCATION);
+                    var location_destination = document.getElementById("location_destination");
+                    var option_location = document.createElement("option");
+                    option_location.text = locs.LOCATION;
+                    location_destination.add(option_location);
+                }
+            });
+        }
+    });
+    console.log(loc_exist);
+    // console.log(loc_layout);
+    // window.location.reload();
+}
 </script>
+
+
