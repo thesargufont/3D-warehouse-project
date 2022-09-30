@@ -1,3 +1,4 @@
+<!-- CONTROLLER FOR MENU EDIT -->
 <?php
 $raw_selected_pallet = $_POST['selected_pallet'];
 $location_destination = $_POST['location_destination'];
@@ -16,7 +17,8 @@ $header = [
     'WEEKLY_MVMT'         ,
     'QTY_PER_PALLET'      ,
     'DAMAGED_PROBABILITY' 
-];
+];    
+
 $list[] = $header;
 
 foreach($datas as $item){
