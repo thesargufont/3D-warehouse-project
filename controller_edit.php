@@ -55,4 +55,4 @@ foreach ($list as $fields) {
 }
 
 fclose($fp);
-echo json_encode('success');
+echo json_encode('success');  
