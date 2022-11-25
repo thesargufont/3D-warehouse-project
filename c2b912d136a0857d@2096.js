@@ -112,15 +112,15 @@ md `## getToolTipText: Custom ToolTip Callback Function`
 )}
 
 function _getToolTipText(){return(
-(join, dataVisual) => { 
-                                   const total = dataVisual.join.reduce((acc,join) => acc + join.dataRow.measure, 0);
-                                   return Object.keys(join.dataRow)
-                                                .map(field => field + ": " + join.dataRow[field])
-                                                .join("<br/>") + "<br/>" + 
-                                          "total measure: " + total + "<br/>" + 
-                                          "measure/total measure: " + 
-                                          (join.dataRow["measure"] / total * 100).toFixed(2) + "%";
-                          }
+  (join, dataVisual) => { 
+      const total = dataVisual.join.reduce((acc,join) => acc + join.dataRow.measure, 0);
+      return Object.keys(join.dataRow)
+                  .map(field => field + ": " + join.dataRow[field])
+                  .join("<br/>") + "<br/>" + 
+            "total measure: " + total + "<br/>" + 
+            "measure/total measure: " + 
+            (join.dataRow["measure"] / total * 100).toFixed(2) + "%";
+  }
 )}
 
 function _13(md){return(
@@ -611,6 +611,7 @@ md`### [Three.js](https://threejs.org/) WebGL Framework`
 async function _THREE(require)
 { 
   //const version = "0.99.0";  
+  // const version = "0.104.0"; 
   const version = "0.104.0"; 
   const THREE = window.THREE = await require('three@' + version + '/build/three.min.js');
   await require('three@' + version + '/examples/js/controls/OrbitControls.js').catch(() => {});

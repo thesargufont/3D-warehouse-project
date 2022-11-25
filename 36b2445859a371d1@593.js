@@ -95,7 +95,7 @@ function collapsibleTree(config = {}){
         .duration(duration)
         .attr("viewBox", [-margin.left, left.x - margin.top, width, height])
         .tween("resize", window.ResizeObserver ? null : () => () => svg.dispatch("toggle"));
-
+    
     // Update the nodes…
     const node = gNode.selectAll("g")
       .data(nodes, d => d.id);

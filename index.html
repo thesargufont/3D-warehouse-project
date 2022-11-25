@@ -29,10 +29,10 @@
                                 <th>LOCATION</th>
                                 <th>ITEM NUMBER</th>
                                 <th>DESCRIPTION</th>
-                                <th>SIZE</th>
-                                <th>ITEM WEIGHT</th>
+                                <th>SIZE (CM)</th>
+                                <th>ITEM WEIGHT (KG)</th>
                                 <th>WEEKLY MOVEMENT</th>
-                                <th>QTY PER PALLET</th>
+                                <th>QTY PER PALLET (PCS)</th>
                                 <th>DAMAGED PROBABILITY</th>
                             </tr>
                         </thead>
@@ -50,7 +50,7 @@
                 <form method="POST" id="search-form" class="form" role="form">
                     <!-- {{-- EXISTING PALLET --}} -->
                     <div class="row mb-2">
-                        <div class="col col-md-1" style="max-width:150px; flex:0px"><label for="existing_pallet">Existing Pallet</label></div>
+                        <div class="col col-md-1" style="max-width:200px; flex:0px"><label for="existing_pallet">Existing Pallet</label></div>
                         <div class="col col-md-5">
                             <div class='input-group'>
                                 <select id="existing_pallet" name="existing_pallet" class="form-control text-uppercase">
@@ -74,7 +74,7 @@
                 <form method="POST" id="edit-form" class="form" role="form">
                     <!-- {{-- EXISTING PALLET --}} -->
                     <div class="row mb-2">
-                        <div class="col col-md-1" style="max-width:150px; flex:0px"><label for="selected_pallet">Pallet</label></div>
+                        <div class="col col-md-1" style="max-width:200px; flex:0px"><label for="selected_pallet">Pallet</label></div>
                         <div class="col col-md-5">
                             <div class='input-group'>
                                 <select id="selected_pallet" name="selected_pallet" class="form-control text-uppercase">
@@ -86,7 +86,7 @@
     
                     <!-- {{-- AVILABLE LOCATION --}} -->
                     <div class="row mb-2">
-                        <div class="col col-md-1" style="max-width:150px; flex:0px"><label for="location_destination">Avilable Location</label></div>
+                        <div class="col col-md-1" style="max-width:200px; flex:0px"><label for="location_destination">Available Location</label></div>
                         <div class="col col-md-5">
                             <div class='input-group'>
                                 <select id="location_destination" name="location_destination" class="form-control text-uppercase">

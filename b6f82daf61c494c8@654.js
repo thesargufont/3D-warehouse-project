@@ -299,11 +299,11 @@ function _boundingBox(THREE,sceneHeight,scene)
   //Cube is used temporarily to set size of boundingBox
   const geometry = new THREE.BoxGeometry(1, sceneHeight, 1);
   geometry.translate(0, sceneHeight / 2, 0);
+  // geometry.translate(0, 0, 0);
   const cube =  new THREE.Mesh(geometry, new THREE.MeshBasicMaterial()); 
   
-  scene.add(cube);
-
   const boundingBox = new THREE.BoxHelper(scene, 0x000000);
+  console.log(boundingBox);
   boundingBox.geometry.computeBoundingBox();  
   boundingBox.geometry.translate( 0, Math.abs(boundingBox.geometry.boundingBox.min.y) ,0 )
 

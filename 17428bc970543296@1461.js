@@ -668,55 +668,55 @@ colorInterpolatorPicker({
 )}
 
 function _colorInterpolatorPicker(html,d3,width,styles,getColorViewer){return(
-function colorInterpolatorPicker(config = {}) {
-  let { value, title, description, height, w, interpolators } = config;
+  function colorInterpolatorPicker(config = {}) {
+    let { value, title, description, height, w, interpolators } = config;
 
-  value = value ? interpolators.find(d => d.name === value) : interpolators[0];
+    value = value ? interpolators.find(d => d.name === value) : interpolators[0];
 
-  const form = html`<form >
-  </form>`;
+    const form = html`<form >
+    </form>`;
 
-  form.value = value.value ? value.value : d3[`interpolate${value.name}`];
+    form.value = value.value ? value.value : d3[`interpolate${value.name}`];
 
-  const dropdown = html`
-  <div class="dropdownsi" style="width:${w ? w : Math.min(width, 500)}px">
-    ${styles()}
-    <span style="font: 700 0.9rem sans-serif;">${title ? title : ""}</span>  
-  </div>
-`;
+    const dropdown = html`
+    <div class="dropdownsi" style="width:${w ? w : Math.min(width, 500)}px">
+      ${styles()}
+      <span style="font: 700 0.9rem sans-serif;">${title ? title : ""}</span>  
+    </div>
+  `;
 
-  let valueCont = html`<div class="colorViewer"></div>`;
-  let valueViewer = getColorViewer(value, form, true);
-  valueCont.append(valueViewer);
-  dropdown.append(valueCont);
+    let valueCont = html`<div class="colorViewer"></div>`;
+    let valueViewer = getColorViewer(value, form, true);
+    valueCont.append(valueViewer);
+    dropdown.append(valueCont);
 
-  const dropdownContainer = html`<div class="dropdownsi-content" 
-      style="max-height:${height ? height : 200}px; 
-             width:${w ? w : Math.min(width, 500)}px;">
- 
-      ${interpolators.map(interpolator => {
-        let colorViewer = getColorViewer(interpolator, form, true);
-        colorViewer.onclick = () => {
-          valueCont.removeChild(valueCont.firstChild);
-          valueViewer = getColorViewer(interpolator, form, true);
-          valueCont.append(valueViewer);
-          form.value = valueViewer.value;
-          form.dispatchEvent(new CustomEvent("input", { bubbles: true }));
-        };
-        return html`<div class="colorViewer"> ${colorViewer} <div>`;
-      })}
-      
-    </div>`;
+    const dropdownContainer = html`<div class="dropdownsi-content" 
+        style="max-height:${height ? height : 200}px; 
+              width:${w ? w : Math.min(width, 500)}px;">
+  
+        ${interpolators.map(interpolator => {
+          let colorViewer = getColorViewer(interpolator, form, true);
+          colorViewer.onclick = () => {
+            valueCont.removeChild(valueCont.firstChild);
+            valueViewer = getColorViewer(interpolator, form, true);
+            valueCont.append(valueViewer);
+            form.value = valueViewer.value;
+            form.dispatchEvent(new CustomEvent("input", { bubbles: true }));
+          };
+          return html`<div class="colorViewer"> ${colorViewer} <div>`;
+        })}
+        
+      </div>`;
 
-  dropdown.append(dropdownContainer);
-  form.append(dropdown);
-  if (description)
-    form.append(
-      html`<div style="font-size: 0.85rem; font-style: italic;">${description}</div>`
-    );
+    dropdown.append(dropdownContainer);
+    form.append(dropdown);
+    if (description)
+      form.append(
+        html`<div style="font-size: 0.85rem; font-style: italic;">${description}</div>`
+      );
 
-  return form;
-}
+    return form;
+  }
 )}
 
 function _32(md){return(

@@ -129,68 +129,7 @@ html`<style>
 `
 )}
 
-function _5(toc){return(
-toc()
-)}
 
-function _6(md){return(
-md`## Bird's Eye View
-
-The [*DataVisual (Data + Visual) Design Pattern for WebGL 3D Assets*](https://observablehq.com/@mariodelgadosr/datavisual-data-visual-design-pattern-for-webgl-3d-assets) notebook detailed the DataVisual design pattern.
-
-This notebook builds on that pattern with an introduction of a strategy for supply chain managers seeking insight into their warehousing operations.
-
-The same strategy is used in a robust implementation of warehouse visualizations in [*My Warehouse Visualizer*](http://mydatavisualizer.com/demo/warehouse/); a custom/optimized version of the [*My Data Visualizer*](http://mydatavisualizer.com/) for 3D WebGL images.
-
-  [*DataVisual Visualization with Data-Embedded glTF Files*](https://observablehq.com/@mariodelgadosr/datavisual-visualization-with-data-embedded-gltf-files) demonstrates similar functionality with 3D images created in [Blender](http://blender.org) exported to a [glTF](https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/README.md) file.
-
-The [interactive WebGL scene](#title) (use mouse to [zoom, pan and rotate](https://threejs.org/docs/#examples/en/controls/OrbitControls)) in this notebook initially displays a 3D warehouse with inventory visualized using the weight (*ITEM WGT*) metric; for light (green) to heavy (red) inventory.   Select other column metrics from the Data Column drop-down for dynamic color scheme visualizations.
-
-Data for the visualization are in a [Google Sheet](https://docs.google.com/spreadsheets/d/14Xwqk9zJxkBt5enYEWTbOPUQrKn0AoMyFYaUePHtk8o/edit#gid=0) that details the dimensions for the warehouse storage slots and calculates whether-or-not the inventory for a designated storage slot is damaged.   The data are accessed with [d3-fetch csv](https://github.com/d3/d3-fetch/blob/v1.1.2/README.md#csv) via the  [Google Sheets API](https://gsuiteupdates.googleblog.com/2015/06/publish-google-sheets-spreadsheets-in.html) that exposes it as a [comma-seperated values](https://en.wikipedia.org/wiki/Comma-separated_values) resource on the web.`
-)}
-
-function _7(md){return(
-md `## Re-slotting Animation
-
-The re-slotting animation demonstrates one possible benefit of  the 3D visualization of a physical warehouse.  
-
-The logic in the [***visualization***](#visualization) cell determines:
-
-  * The location of warehouse exit on the lower right edge of the visualization;
-  * The location of the heaviest item in the inventory;
-  * An empty slot that is closest to the exit and at ground level;
-  * An animation path to illustrate the re-slotting operation to the new location.
-`
-)}
-
-async function _8(md,FileAttachment){return(
-md`## Layout and Inventory Data in the [***Small Warehouse*** Google Sheet](https://docs.google.com/spreadsheets/d/14Xwqk9zJxkBt5enYEWTbOPUQrKn0AoMyFYaUePHtk8o/edit#gid=0)
-
-<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3XpGLIsLj3cyj4rdraGQggWcjN-eHL4HgHec0gEWGc2g5lZi5q0FRpj-I73CCpYE-lsVeiHmhzeA3/pubhtml?widget=true&amp;headers=false" width=900 height=250></iframe>
-
-* Column *LOCATION* in both the Layout and Inventory pages represents a common key between the datasets.
-
-* Columns *WIDTH*, *DEPTH*, *HEIGHT*, *X*, *Y*, *Z* in the Layout page are the dimensional and spatial attributes for a given storage slot.
-
-* Column *COLOR_CASES DAMAGED* in the Inventory page computes an [HTML Color Name](https://www.w3schools.com/colors/colors_names.asp) as a function of the *CASES DAMAGED* column.  This computed color is parsed from the data in this notebook and is dynamically assigned to the slots in the visualization. 
-
-  * Dynamic color scale assignments are also available with [*My Warehouse Visualizer*](http://MyDataVisualizer.com/demo/warehouse) and in the visualization on this notebook.  For example:
-
-    * The *ITEM WGT* column can create a visualization that helps to quickly identify heavy items located high within a storage bay.
-
-    * To reproduce above, select the *ITEM WGT* column, *RdYlGn (I)* (**I**nverted) color scale to visualize heavier objects on the red end of the coloring scale.  
-
-    * Warehousing best practices seeks to keep heavy items close to the ground for safety and quick storage/retrieval. However, when all the ground-level storage is occupied higher level storage locations are used:
-
-      <img width="900px" alt="Screen Shot of Heavy Inventory Analysis from My Warehouse Visualizer" src="${await FileAttachment("MyWarehouseVisualizerHeavyAnalysis@3.PNG").url()}" />
-
-* Other column attributes associated with the layout and inventory are available for value-added analyses within [*My Warehouse Visualizer*](http://MyDataVisualizer.com/demo/warehouse).  For example:
-
-    * The *LINK_* column is utilized to create a data driven hyperlink referencing a specific row's *LOCATION* attribute value.
-
-    * Column *ITEM NO* is prefixed with '\\s' to instruct the [*My Warehouse Visualizer*](http://MyDataVisualizer.com/demo/warehouse) data load [parser](https://observablehq.com/@d3/d3-autotype) to intrerpret the numeric values in the column as strings.
-`
-)}
 
 function _9(md){return(
 md`## Warehouse Data Retrieved with [d3-fetch csv](https://github.com/d3/d3-fetch/blob/v1.1.2/README.md#csv) from the [Published](https://docs.google.com/spreadsheets/d/14Xwqk9zJxkBt5enYEWTbOPUQrKn0AoMyFYaUePHtk8o/edit#gid=0) Google Sheet CSV Pages: [Layout](https://docs.google.com/spreadsheets/d/e/2PACX-1vT3XpGLIsLj3cyj4rdraGQggWcjN-eHL4HgHec0gEWGc2g5lZi5q0FRpj-I73CCpYE-lsVeiHmhzeA3/pub?gid=0&single=true&output=csv) and [Inventory](https://docs.google.com/spreadsheets/d/e/2PACX-1vT3XpGLIsLj3cyj4rdraGQggWcjN-eHL4HgHec0gEWGc2g5lZi5q0FRpj-I73CCpYE-lsVeiHmhzeA3/pub?gid=377990885&single=true&output=csv)`
@@ -264,7 +203,9 @@ function _warehouseVisual(THREE,layoutData)
 				if (!geometriesMap.has(geometryKey)) {
           
           const cubeGeometry = new THREE.BoxBufferGeometry(parseFloat(WIDTH), parseFloat(HEIGHT), parseFloat(DEPTH)); 
+          // const cubeGeometry = new THREE.BoxBufferGeometry(parseFloat(X), parseFloat(Y), parseFloat(Z)); 
 					const edgeGeometry = 	 new THREE.EdgesGeometry(cubeGeometry);
+          console.log(edgeGeometry);
 					geometriesMap.set(geometryKey, {cubeGeometry, edgeGeometry});
 				
 				} // if
@@ -274,10 +215,12 @@ function _warehouseVisual(THREE,layoutData)
 				const cubeMaterial = new THREE.MeshBasicMaterial( {transparent: true,  wireframe: false});
 						
 				const edge = new THREE.LineSegments(edgeGeometry, edgeMaterial); 
+				      // edge.renderOrder = 0; //https://threejs.org/docs/index.html#api/en/core/Object3D.renderOrder
 				      edge.renderOrder = 0; //https://threejs.org/docs/index.html#api/en/core/Object3D.renderOrder
 				
 				const pallet = new THREE.Mesh(cubeGeometry, cubeMaterial);
 				      pallet.material.opacity = 0.75;
+				      // pallet.material.opacity = 0;
 				      pallet.renderOrder = 1;
 				
 				const slot = new THREE.Group();					
@@ -286,10 +229,23 @@ function _warehouseVisual(THREE,layoutData)
               slot.name = LOCATION;
               slot.userData = layoutData[i]; 
               //Translatiing slot warehouse coordinates to WebGL screen coordinates
-              slot.position.x = parseFloat(X) + (parseFloat(HEIGHT) / 2); 
-              slot.position.y = parseFloat(Z) + (parseFloat(DEPTH)  / 2); 							
-              slot.position.z = parseFloat(Y) + (parseFloat(HEIGHT) / 2);  
-              // console.log(slot);
+
+              // slot.position.x = parseFloat(X) + (parseFloat(WIDTH) / 2); 
+              // slot.position.y = parseFloat(Z) + (parseFloat(DEPTH)  / 2); 							
+              // slot.position.z = parseFloat(Y) + (parseFloat(HEIGHT) / 2);  
+
+              // slot.position.x = (parseFloat(HEIGHT)); 
+              // slot.position.y = (parseFloat(DEPTH)); 							
+              // slot.position.z = (parseFloat(HEIGHT));  
+
+              slot.position.x = parseFloat(X); 
+              slot.position.y = parseFloat(Z); 							
+              slot.position.z = parseFloat(Y);  
+
+              // slot.position.y = parseFloat(Y); 							
+              // slot.position.z = parseFloat(Z);  
+              console.log('slot');
+              console.log(slot);
 				warehouse.add(slot);			
 		} // for
     
@@ -299,10 +255,6 @@ function _warehouseVisual(THREE,layoutData)
 				
 	}
 
-
-function _15(md){return(
-md `### [DataVisual](https://observablehq.com/@mariodelgadosr/datavisual-data-visual-design-pattern-for-webgl-3d-assets) 'Joining' inventoryData to warehouseVisual`
-)}
 
 function _warehouseDataVisual(layoutData,inventoryData,dataVisual,warehouseVisual)
 { 
@@ -406,7 +358,7 @@ function _curve(){return(
 )}
 
 function _height(){return(
-500
+700
 )}
 
 function _camera(width,height,THREE)
@@ -519,29 +471,13 @@ function _colorScheme(d3,colorSchemes,colorInterpolatorPicker)
 }
 
 
-function _29(md){return(
-md`🢇 Click cell to exapand code for ***viewof simulate***`
-)}
-
-// function _simulate(checkbox){return(
-// checkbox({
-//   description: "Simulate re-slotting of heaviest item to lowest slot near exit",
-//   options: [{ value: "Show Animation", label: "Animate re-slotting" }],
-//   value: "Show Animation"
-// })
-// )}
-
-function _textDemo(md){return(
-md`## Imports`
-)}
-
 function _d3(require){return(
 require("d3@6")
 )}
 
 async function _THREE(require)
 {
-  //const version = "0.99.0";
+  // const version = "0.99.0";
   const version = "0.104.0";
   const THREE = window.THREE = await require('three@' + version + '/build/three.min.js');
   await require('three@' + version + '/examples/js/controls/OrbitControls.js').catch(() => {});
@@ -549,35 +485,6 @@ async function _THREE(require)
 }
 
 
-function _40(md){return(
-md`### [DataVisual](https://github.com/MarioDelgadoSr/DataVisual) Class`
-)}
-
-function _license(md){return(
-md `## License
-
-Free to all non-profit organizations.  Businesses and commercial enterprises are granted a full-use license as long as they make their application freely available to non-profits.
-
-`
-)}
-
-function _43(md){return(
-md `## References`
-)}
-
-function _44(md){return(
-md `
-* [Importing data from Google Spreadsheets into a notebook / webpage](https://observablehq.com/@bryangingechen/importing-data-from-google-spreadsheets-into-a-notebook-we)
-
-* [*My Warehouse Visualizer Documentation*](https://github.com/MarioDelgadoSr/MyWarehouseVisualizerDoc)
-
-* [*My Warehouse Visualizer*](http://mydatavisualizer.com/demo)
-
-* [*My Data Visualizer*](http://mydatavisualizer.com/) 
-
-* [DataVisual Visualization with Data-Embedded glTF Files](https://observablehq.com/@mariodelgadosr/datavisual-visualization-with-data-embedded-gltf-files)
-`
-)}
 
 export default function define(runtime, observer) {
   const main = runtime.module();
@@ -592,6 +499,7 @@ export default function define(runtime, observer) {
   main.builtin("FileAttachment", runtime.fileAttachments(name => fileAttachments.get(name)));
   main.variable(observer("title")).define("title", ["md"], _title);
   main.variable(observer("renderedScene")).define("renderedScene", ["warehouseDataVisual","THREE","boundingBox","camera","width","height","invalidation"], _renderedScene);
+  // main.variable(observer("renderedScene")).define("renderedScene", ["warehouseDataVisual","THREE","camera","width","height","invalidation"], _renderedScene);
   main.variable(observer()).define(["visualization","warehouseDataVisual","selColumn","html","d3","legend","width","scaleType","colorScheme"], _3);
   // main.variable(observer("sceneInputs")).define("sceneInputs", ["html","viewof selColumn","viewof simulate","viewof scaleType","FileAttachment","viewof colorScheme"], _sceneInputs);
   // main.variable(observer()).define(["toc"], _5);
@@ -611,10 +519,15 @@ export default function define(runtime, observer) {
   // main.variable(observer()).define(["md"], _15);
   main.variable(observer("warehouseDataVisual")).define("warehouseDataVisual", ["layoutData","inventoryData","dataVisual","warehouseVisual"], _warehouseDataVisual);
   main.variable(observer("visualization")).define("visualization", ["d3","warehouseDataVisual","selColumn","scaleType","colorScheme","visualObjWithHeaviestItem","THREE","boundingBox","bezierPath"], _visualization);
-  // main.variable(observer("curve")).define("curve", _curve);
+  // main.variable(observer("visualization")).define("visualization", ["d3","warehouseDataVisual","selColumn","scaleType","colorScheme","visualObjWithHeaviestItem","THREE","bezierPath"], _visualization);
+  // // main.variable(observer("curve")).define("curve", _curve);
   main.variable(observer("height")).define("height", _height);
   main.variable(observer("camera")).define("camera", ["width","height","THREE"], _camera);
+
+
   main.variable(observer("boundingBox")).define("boundingBox", ["THREE","warehouseDataVisual"], _boundingBox);
+
+
   main.variable(observer("visualObjWithHeaviestItem")).define("visualObjWithHeaviestItem", ["warehouseDataVisual","d3"], _visualObjWithHeaviestItem);
   // main.variable(observer()).define(["md"], _23);
 
