@@ -1,4 +1,4 @@
-// https://observablehq.com/@mariodelgadosr/warehouse-visualization-with-datavisual@1249
+
 import define1 from "./e93997d5089d7165@2303.js";
 import define2 from "./a33468b95d0b15b0@808.js";
 import define3 from "./17428bc970543296@1461.js";
@@ -61,7 +61,6 @@ function* _renderedScene(warehouseDataVisual,THREE,boundingBox,camera,width,heig
 
   warehouseDataVisual.addToolTip(renderer, camera);
 
-  // https://observablehq.com/@observablehq/invalidation
   invalidation.then(() => (controls.dispose(), renderer.dispose()));
 
   while (true) {
@@ -101,62 +100,17 @@ function _3(visualization,warehouseDataVisual,selColumn,html,d3,legend,width,sca
   } // else
 }
 
-
-async function _sceneInputs(html,$0,$1,$2,FileAttachment,$3){return(
-html`<style>
-.grid-container {
-  display: grid;
-  height: 150px;
-  grid-template-areas:
-  "gltfURL scaleType   mouse" 
-  "colorScheme  colorScheme colorScheme" ;
-}
-</style>
-<div class="grid-container">
-  <div class="selColumn">${$0}</div>
-  <div class="scaleType">${$1}${$2} </div>
-  <div class="mouse">
-    <figure style="width:50px;height:20px;">
-      ${await FileAttachment("mouse.png").image()}
-     <figcaption><a target="_blank" href="https://threejs.org/docs/#examples/en/controls/OrbitControls">Zoom,pan and rotate image</a>
-    </figcaption>
-    </figure>
-  </div>
-   <div class="colorScheme">${$3}</div>
-</div>
-
-</div>
-`
-)}
-
-
-
-function _9(md){return(
-md`## Warehouse Data Retrieved with [d3-fetch csv](https://github.com/d3/d3-fetch/blob/v1.1.2/README.md#csv) from the [Published](https://docs.google.com/spreadsheets/d/14Xwqk9zJxkBt5enYEWTbOPUQrKn0AoMyFYaUePHtk8o/edit#gid=0) Google Sheet CSV Pages: [Layout](https://docs.google.com/spreadsheets/d/e/2PACX-1vT3XpGLIsLj3cyj4rdraGQggWcjN-eHL4HgHec0gEWGc2g5lZi5q0FRpj-I73CCpYE-lsVeiHmhzeA3/pub?gid=0&single=true&output=csv) and [Inventory](https://docs.google.com/spreadsheets/d/e/2PACX-1vT3XpGLIsLj3cyj4rdraGQggWcjN-eHL4HgHec0gEWGc2g5lZi5q0FRpj-I73CCpYE-lsVeiHmhzeA3/pub?gid=377990885&single=true&output=csv)`
-)}
-
 async function _layoutData(d3,FileAttachment){return(
 d3.csvParse(await FileAttachment("Small Warehouse - Layout.csv").text(), d3.autoType)
 )}
 
-function _testing(d3, FileAttachment) {
-  // return d3;
-  return d3.csvParse(FileAttachment("Small Warehouse - Layout.csv").text(), d3.autoType)
-}
-
-
-
-
-
 async function _inventoryData(d3,FileAttachment)
 { 
-  
   // Parse: don't autoType designated string columns
   const parse = o => { 
                        Object.keys(o).forEach(k => o[k] = !k.startsWith("\\s") ? d3.autoType([o[k]])[0] : o[k]) ; 
                        return o;
                      };   
-   // inventoryData = await d3.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT3XpGLIsLj3cyj4rdraGQggWcjN-eHL4HgHec0gEWGc2g5lZi5q0FRpj-I73CCpYE-lsVeiHmhzeA3/pub?gid=377990885&single=true&output=csv");
   
   // Local file access to deal with network realiablity issues
   const inventoryData = d3.csvParse(await FileAttachment("Small Warehouse - Inventory.csv").text(), parse);
@@ -167,18 +121,7 @@ async function _inventoryData(d3,FileAttachment)
                                    Object.keys(d).forEach(k => o[k.replace("\\s","")] = d[k] ) 
                                    return o;
                                  }); 
-
-  
 }
-
-
-function _12(md){return(
-md `## Objects for the Warehouse Visualization`
-)}
-
-function _13(md){return(
-md`### [three.js](https://threejs.org/) Scene for the Warehouse Visualization Derived from layoutData`
-)}
 
 function _warehouseVisual(THREE,layoutData)
 {
@@ -189,7 +132,6 @@ function _warehouseVisual(THREE,layoutData)
 		warehouse.name = "warehouseGroup";
     warehouse.visible = false;
 		// console.log(warehouse);											
-    // https://www.cloudhadoop.com/2018/08/es6-map-class-tutorials-with-javascript.html
 		const geometriesMap = new Map();
 		const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4}); 			
 	  // console.log(geometriesMap);
@@ -301,21 +243,6 @@ function _visualization(d3,warehouseDataVisual,selColumn,scaleType,colorScheme,v
     "warehouseGroup"
   ).visible = true;
 
-  // if (curve.path) curve.path.destroy();
-
-  // curve.path = getReSlotPath("curvePath");
-
-  // if (curve.path) {
-  //   if (!!simulate) {
-  //     curve.path.setColor(
-  //       visualObjWithHeaviestItem.children[1].material.color.getHex()
-  //     );
-  //     curve.path.animate();
-  //   } else {
-  //     curve.path.destroy();
-  //   } // else
-  // } // if
-
   return Array.isArray(domain)
     ? { scale: colorScheme, scaleType: "scaleSequential", domain: domain }
     : domain;
@@ -352,11 +279,6 @@ function _visualization(d3,warehouseDataVisual,selColumn,scaleType,colorScheme,v
   } // getReSlotPath
 }
 
-
-function _curve(){return(
-{}
-)}
-
 function _height(){return(
 700
 )}
@@ -387,10 +309,6 @@ warehouseDataVisual.join
                            .sort((x,y) => d3.descending(x.dataRow["ITEM WGT"], y.dataRow["ITEM WGT"] ))[0].visualObj
 )}
 
-function _23(md){return(
-md`🢇 Click cell to exapand code for ***viewof scaleType***`
-)}
-
 function _scaleType(select)
 {
   const scales = "Sequential".split(",");
@@ -405,11 +323,6 @@ function _scaleType(select)
 
   return scaleType;
 }
-
-
-function _25(md){return(
-md`🢇 Click cell to exapand code for ***viewof selColumn***`
-)}
 
 function _selColumn(warehouseDataVisual,select)
 {
@@ -430,11 +343,6 @@ function _selColumn(warehouseDataVisual,select)
 
   return selColumn;
 }
-
-
-function _27(md){return(
-md`🢇 Click cell to exapand code for ***viewof colorScheme***`
-)}
 
 function _colorScheme(d3,colorSchemes,colorInterpolatorPicker)
 {
